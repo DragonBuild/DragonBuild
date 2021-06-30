@@ -61,6 +61,7 @@ class Device(object):
         return system(f'ssh -o PasswordAuthentication=no -p {self.port} root@{self.host} 2>/dev/null "true"') == 0
 
     def run_cmd(self, cmd, quiet=False):
+        if cmd == "none": return
         if not quiet:
             if cmd == '':
                 dbstate(f'No command entered.')
@@ -171,11 +172,12 @@ def main():
     if 'test' in sys.argv[1]:
         dbstate('Testing Connection')
         if device_manager.current.test_connection():
-            dbstate('Connected!')
-            exit(0)
+           dbstate('Connected!')
+           exit(0)
         else:
-            dberror('Connection Failed')
-            exit(1)
+           dberror('Connection Failed')
+           dberror('Error connecting to device, make sure SSH is functioning properly')
+           exit(1)
 
 
 if __name__ == '__main__':
